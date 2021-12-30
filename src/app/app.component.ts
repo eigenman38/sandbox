@@ -8,7 +8,7 @@ import { mergeMap, map, switchMap } from 'rxjs/operators';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'sandbox';
+  title = 'The Sandbox';
 
   ngOnInit(): void {}
 
