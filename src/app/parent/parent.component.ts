@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { of, interval, Observable, Subscription } from 'rxjs';
-import { mergeMap, map, switchMap } from 'rxjs/operators';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { of, interval, Observable, Subscription, Subject } from 'rxjs';
+import { mergeMap, map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-parent',
@@ -14,11 +14,18 @@ export class ParentComponent implements OnInit {
   private switchMapSubscription: Subscription | undefined;
   private switchMapResult$: Observable<string> | undefined;
 
+  private destroyed$: Subject<boolean> = new Subject<boolean>();
+
+  private selector: string;
+
   readonly letters = of('a', 'b', 'c');
 
-  constructor() {}
+  constructor(private elementRef: ElementRef) {
+    this.selector = elementRef.nativeElement.tagName;
+  }
 
   ngOnInit(): void {
+    console.log(`ngOnInit: ${this.selector}`);
     this.mergeMapResult$ = this.letters.pipe(
       mergeMap((x) => interval(1000).pipe(map((i) => x + i)))
     );
@@ -28,15 +35,16 @@ export class ParentComponent implements OnInit {
     );
   }
   ngOnDestroy(): void {
-    this.mergeMapUnsubscribe();
-    this.switchMapUnsubscribe();
+    this.destroyed$.next(true);
+    this.destroyed$.unsubscribe();
+    console.log(`ngOnDestroy: ${this.selector}`);
   }
 
   mergeMapSubscribe() {
     this.mergeMapUnsubscribe();
-    this.mergeMapSubscription = this.mergeMapResult$?.subscribe((x) =>
-      console.log(x)
-    );
+    this.mergeMapResult$
+      ?.pipe(takeUntil(this.destroyed$))
+      .subscribe((x) => console.log(x));
   }
 
   mergeMapUnsubscribe() {
@@ -46,9 +54,9 @@ export class ParentComponent implements OnInit {
   //switchMap
   switchMapSubscribe() {
     this.switchMapUnsubscribe();
-    this.switchMapSubscription = this.switchMapResult$?.subscribe((x) =>
-      console.log(x)
-    );
+    this.switchMapResult$
+      ?.pipe(takeUntil(this.destroyed$))
+      .subscribe((x) => console.log(x));
   }
 
   switchMapUnsubscribe() {

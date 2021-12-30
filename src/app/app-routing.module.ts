@@ -4,7 +4,7 @@ import { ParentComponent } from './parent/parent.component';
 
 const routes: Routes = [
   { path: 'parent', component: ParentComponent },
-  { path: '', redirectTo: '/', pathMatch: 'full' },
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
 @NgModule({
