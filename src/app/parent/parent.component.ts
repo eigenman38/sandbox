@@ -7,7 +7,7 @@ import { mergeMap, map, switchMap, takeUntil } from 'rxjs/operators';
   templateUrl: './parent.component.html',
   styleUrls: ['./parent.component.css'],
 })
-export class ParentComponent implements OnInit {
+export class ParentComponent implements OnInit, OnDestroy {
   private mergeMapSubscription: Subscription | undefined;
   private mergeMapResult$: Observable<string> | undefined;
 
