@@ -6,6 +6,7 @@
 </button>
 <app-blue-child
   [switchMapSubscribed$]="switchMapBlueChildSubscribed$"
+  (mergeValueEmitted)="mapValue = $event"
 ></app-blue-child>
 <br />
 <button (click)="mergeMapSubscribeToggle()">
@@ -16,4 +17,7 @@
 </button>
 <app-red-child
   [mergeMapSubscribed$]="mergeMapBlueChildSubscribed$"
+  (mergeValueEmitted)="mapValue = $event"
 ></app-red-child>
+<br />
+<span>{{ mapValue }}</span>

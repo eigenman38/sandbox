@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   BehaviorSubject,
   interval,
@@ -18,6 +26,7 @@ import {
 })
 export class BlueChildComponent implements OnInit, OnDestroy {
   @Input() switchMapSubscribed$!: BehaviorSubject<boolean>;
+  @Output() mergeValueEmitted = new EventEmitter<string>();
 
   private selector: string;
   private destroyed$: Subject<boolean> = new Subject<boolean>();
@@ -34,7 +43,8 @@ export class BlueChildComponent implements OnInit, OnDestroy {
     console.log(`ngOnInit: ${this.selector}`);
 
     this.switchMapResult$ = this.letters.pipe(
-      switchMap((x) => interval(1000).pipe(map((i) => x + i)))
+      switchMap((x) => interval(1000).pipe(map((i) => x + i))),
+      takeUntil(this.destroyed$)
     );
 
     this.switchMapSubscribed$
@@ -62,9 +72,10 @@ export class BlueChildComponent implements OnInit, OnDestroy {
   //switchMap
   private switchMapSubscribe() {
     this.switchMapUnsubscribe();
-    this.switchMapSubscription = this.switchMapResult$
-      ?.pipe(takeUntil(this.destroyed$)) // move takeuntil to upper def.
-      .subscribe((x) => console.log(x));
+    this.switchMapSubscription = this.switchMapResult$?.subscribe((x) => {
+      this.mergeValueEmitted.emit(x);
+      console.log(x);
+    });
   }
 
   private switchMapUnsubscribe() {

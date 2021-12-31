@@ -21,6 +21,8 @@ import {
   styleUrls: ['./parent.component.css'],
 })
 export class ParentComponent implements OnInit, OnDestroy {
+  mapValue: string = '';
+
   switchMapBlueChildSubscribed$: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
 
