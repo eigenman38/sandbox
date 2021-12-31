@@ -1,5 +1,14 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  BehaviorSubject,
   interval,
   map,
   Observable,
@@ -16,6 +25,9 @@ import {
   styleUrls: ['./blue-child.component.css'],
 })
 export class BlueChildComponent implements OnInit, OnDestroy {
+  @Input() switchMapSubscribed$!: BehaviorSubject<boolean>;
+  @Output() mergeValueEmitted = new EventEmitter<string>();
+
   private selector: string;
   private destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -31,8 +43,25 @@ export class BlueChildComponent implements OnInit, OnDestroy {
     console.log(`ngOnInit: ${this.selector}`);
 
     this.switchMapResult$ = this.letters.pipe(
-      switchMap((x) => interval(1000).pipe(map((i) => x + i)))
+      switchMap((x) => interval(1000).pipe(map((i) => x + i))),
+      takeUntil(this.destroyed$)
     );
+
+    this.switchMapSubscribed$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((x) => {
+        if (x) {
+          console.log(
+            `ngOnInit: ${this.selector} Subscribed(true) Event Received`
+          );
+          this.switchMapSubscribe();
+        } else {
+          console.log(
+            `ngOnInit: ${this.selector} Unsubscribed(false) Event Received`
+          );
+          this.switchMapUnsubscribe();
+        }
+      });
   }
   ngOnDestroy(): void {
     this.destroyed$.next(true);
@@ -41,14 +70,15 @@ export class BlueChildComponent implements OnInit, OnDestroy {
   }
 
   //switchMap
-  switchMapSubscribe() {
+  private switchMapSubscribe() {
     this.switchMapUnsubscribe();
-    this.switchMapSubscription = this.switchMapResult$
-      ?.pipe(takeUntil(this.destroyed$))
-      .subscribe((x) => console.log(x));
+    this.switchMapSubscription = this.switchMapResult$?.subscribe((x) => {
+      this.mergeValueEmitted.emit(x);
+      console.log(x);
+    });
   }
 
-  switchMapUnsubscribe() {
+  private switchMapUnsubscribe() {
     this.switchMapSubscription?.unsubscribe();
   }
 }

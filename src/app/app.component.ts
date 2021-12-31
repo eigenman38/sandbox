@@ -10,7 +10,16 @@ import { mergeMap, map, switchMap } from 'rxjs/operators';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'The Sandbox';
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    let testArrary: string[] = ['one', 'two'];
+    let resultOfMapArray = testArrary.map((x) => {
+      return x + '!';
+    });
+
+    resultOfMapArray.forEach((x) => {
+      console.log(`resultOfMapArray: ${x}`);
+    });
+  }
 
   ngOnDestroy(): void {}
 }
