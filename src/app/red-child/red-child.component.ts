@@ -47,19 +47,21 @@ export class RedChildComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$)
     );
 
-    this.mergeMapSubscribed$.pipe(takeUntil(this.destroyed$)).subscribe((x) => {
-      if (x) {
-        console.log(
-          `ngOnInit: ${this.selector} Subscribed(true) Event Received`
-        );
-        this.mergeMapSubscribe();
-      } else {
-        console.log(
-          `ngOnInit: ${this.selector} Unsubscribed(false) Event Received`
-        );
-        this.mergeMapUnsubscribe();
-      }
-    });
+    this.mergeMapSubscribed$
+      ?.pipe(takeUntil(this.destroyed$))
+      .subscribe((x) => {
+        if (x) {
+          console.log(
+            `ngOnInit: ${this.selector} Subscribed(true) Event Received`
+          );
+          this.mergeMapSubscribe();
+        } else {
+          console.log(
+            `ngOnInit: ${this.selector} Unsubscribed(false) Event Received`
+          );
+          this.mergeMapUnsubscribe();
+        }
+      });
   }
 
   ngOnDestroy(): void {
