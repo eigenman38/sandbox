@@ -1,8 +1,19 @@
-<button class="switch-map" (click)="switchMapSubscribeToggle()">
-  switchMap Subscribed/Unubscribed
+<button (click)="switchMapSubscribeToggle()">
+  <div *ngIf="switchMapBlueChildSubscribed$ | async">SwitchMap Subscribed</div>
+  <div *ngIf="!(switchMapBlueChildSubscribed$ | async)">
+    SwitchMap Unsubscribed
+  </div>
 </button>
 <app-blue-child
   [switchMapSubscribed$]="switchMapBlueChildSubscribed$"
 ></app-blue-child>
 <br />
-<app-red-child></app-red-child>
+<button (click)="mergeMapSubscribeToggle()">
+  <div *ngIf="mergeMapBlueChildSubscribed$ | async">MergeMap Subscribed</div>
+  <div *ngIf="!(mergeMapBlueChildSubscribed$ | async)">
+    MergeMap Unsubscribed
+  </div>
+</button>
+<app-red-child
+  [mergeMapSubscribed$]="mergeMapBlueChildSubscribed$"
+></app-red-child>

@@ -60,14 +60,14 @@ export class BlueChildComponent implements OnInit, OnDestroy {
   }
 
   //switchMap
-  switchMapSubscribe() {
+  private switchMapSubscribe() {
     this.switchMapUnsubscribe();
     this.switchMapSubscription = this.switchMapResult$
       ?.pipe(takeUntil(this.destroyed$)) // move takeuntil to upper def.
       .subscribe((x) => console.log(x));
   }
 
-  switchMapUnsubscribe() {
+  private switchMapUnsubscribe() {
     this.switchMapSubscription?.unsubscribe();
   }
 }

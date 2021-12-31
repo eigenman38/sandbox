@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import {
+  BehaviorSubject,
   interval,
   map,
   mergeMap,
@@ -16,6 +17,8 @@ import {
   styleUrls: ['./red-child.component.css'],
 })
 export class RedChildComponent implements OnInit, OnDestroy {
+  @Input() mergeMapSubscribed$!: BehaviorSubject<boolean>;
+
   private selector: string;
   private destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -33,6 +36,20 @@ export class RedChildComponent implements OnInit, OnDestroy {
     this.mergeMapResult$ = this.letters.pipe(
       mergeMap((x) => interval(1000).pipe(map((i) => x + i)))
     );
+
+    this.mergeMapSubscribed$.pipe(takeUntil(this.destroyed$)).subscribe((x) => {
+      if (x) {
+        console.log(
+          `ngOnInit: ${this.selector} Subscribed(true) Event Received`
+        );
+        this.mergeMapSubscribe();
+      } else {
+        console.log(
+          `ngOnInit: ${this.selector} Unsubscribed(false) Event Received`
+        );
+        this.mergeMapUnsubscribe();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -41,14 +58,14 @@ export class RedChildComponent implements OnInit, OnDestroy {
     console.log(`ngOnDestroy: ${this.selector}`);
   }
 
-  mergeMapSubscribe() {
+  private mergeMapSubscribe() {
     this.mergeMapUnsubscribe();
     this.mergeMapSubscription = this.mergeMapResult$
       ?.pipe(takeUntil(this.destroyed$))
       .subscribe((x) => console.log(x));
   }
 
-  mergeMapUnsubscribe() {
+  private mergeMapUnsubscribe() {
     this.mergeMapSubscription?.unsubscribe();
   }
 }

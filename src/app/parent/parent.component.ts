@@ -24,6 +24,9 @@ export class ParentComponent implements OnInit, OnDestroy {
   switchMapBlueChildSubscribed$: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
 
+  mergeMapBlueChildSubscribed$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+
   private destroyed$: Subject<boolean> = new Subject<boolean>();
 
   private selector: string;
@@ -67,5 +70,21 @@ export class ParentComponent implements OnInit, OnDestroy {
     //     }
     //   })
     // );
+  }
+
+  // toggles the red child switch map subscription
+  mergeMapSubscribeToggle(): void {
+    let currentState = this.mergeMapBlueChildSubscribed$.getValue();
+    if (currentState) {
+      console.log(
+        `ngOnInit: ${this.selector} mergeMapSubscribeToggle: true: sending false`
+      );
+      this.mergeMapBlueChildSubscribed$.next(false);
+    } else {
+      console.log(
+        `ngOnInit: ${this.selector} mergeMapSubscribeToggle: false: sending true`
+      );
+      this.mergeMapBlueChildSubscribed$.next(true);
+    }
   }
 }
