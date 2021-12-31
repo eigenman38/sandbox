@@ -1,3 +1,8 @@
-<app-blue-child></app-blue-child>
+<button class="switch-map" (click)="switchMapSubscribeToggle()">
+  switchMap Subscribed/Unubscribed
+</button>
+<app-blue-child
+  [switchMapSubscribed$]="switchMapBlueChildSubscribed$"
+></app-blue-child>
 <br />
 <app-red-child></app-red-child>

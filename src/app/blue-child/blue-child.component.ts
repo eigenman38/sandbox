@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import {
+  BehaviorSubject,
   interval,
   map,
   Observable,
@@ -16,6 +17,8 @@ import {
   styleUrls: ['./blue-child.component.css'],
 })
 export class BlueChildComponent implements OnInit, OnDestroy {
+  @Input() switchMapSubscribed$!: BehaviorSubject<boolean>;
+
   private selector: string;
   private destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -33,6 +36,22 @@ export class BlueChildComponent implements OnInit, OnDestroy {
     this.switchMapResult$ = this.letters.pipe(
       switchMap((x) => interval(1000).pipe(map((i) => x + i)))
     );
+
+    this.switchMapSubscribed$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((x) => {
+        if (x) {
+          console.log(
+            `ngOnInit: ${this.selector} Subscribed(true) Event Received`
+          );
+          this.switchMapSubscribe();
+        } else {
+          console.log(
+            `ngOnInit: ${this.selector} Unsubscribed(false) Event Received`
+          );
+          this.switchMapUnsubscribe();
+        }
+      });
   }
   ngOnDestroy(): void {
     this.destroyed$.next(true);
@@ -44,7 +63,7 @@ export class BlueChildComponent implements OnInit, OnDestroy {
   switchMapSubscribe() {
     this.switchMapUnsubscribe();
     this.switchMapSubscription = this.switchMapResult$
-      ?.pipe(takeUntil(this.destroyed$))
+      ?.pipe(takeUntil(this.destroyed$)) // move takeuntil to upper def.
       .subscribe((x) => console.log(x));
   }
 
