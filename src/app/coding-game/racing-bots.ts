@@ -25,7 +25,7 @@ class System {
   private static boosted = false;
   private static checkPoints: checkPointType[] = [];
   private static lapped: boolean = false;
-  private static largestCheckpointIndex: number = null;
+  private static largestCheckpointIndex: number | null = null;
 
   public static checkPointChanged(currentCheckpoint: checkPointType): boolean {
     // check if changed and not [0,0] start
@@ -33,9 +33,6 @@ class System {
     console.error(
       `lastCheckpoint = ${this.lastCheckpoint} currentCheckpoint = ${currentCheckpoint}`
     );
-
-    //make this a.length === b.length &&
-    //a.every((val, index) => val === b[index])
 
     if (Utilities.arrayEqual(this.lastCheckpoint, [0, 0, 0])) {
       // tuple equality not workign as expected.
@@ -57,6 +54,8 @@ class System {
     }
   }
 
+  //todo: seen does not mean lapped because we stored it when it changed but next iteration has changed false
+  //we see it agin but it hasn't changed yet.
   public static checkPointSeen(
     currentCheckpoint: checkPointType,
     checkPointChanged: boolean
@@ -67,7 +66,10 @@ class System {
     }
 
     let seen = this.checkPoints?.some((checkPointType) => {
-      return checkPointType.slice(0, 1) === currentCheckpoint.slice(0, 1);
+      return Utilities.arrayEqual(
+        checkPointType.slice(0, 1),
+        currentCheckpoint.slice(0, 1)
+      );
     });
 
     // if we've seen it then we have lapped.
@@ -95,11 +97,11 @@ class System {
       return false;
     }
 
-    if (!this.angleStableForBoost(checkpointAngle)) {
+    if (this.angleStableForBoost(checkpointAngle)) {
       return false;
     }
 
-    if (!this.onLongestLeg(checkPoint)) {
+    if (this.onLongestLeg(checkPoint)) {
       return false;
     }
 
@@ -119,8 +121,10 @@ class System {
     }
 
     if (
-      checkPoint.slice(0, 1) ===
-      this.checkPoints[this.largestCheckpointIndex].slice(0, 1)
+      Utilities.arrayEqual(
+        checkPoint.slice(0, 1),
+        this.checkPoints[this.largestCheckpointIndex].slice(0, 1)
+      )
     ) {
       return true;
     }
