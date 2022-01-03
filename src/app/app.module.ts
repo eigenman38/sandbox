@@ -7,6 +7,7 @@ import { ParentComponent } from './parent/parent.component';
 import { RedChildComponent } from './red-child/red-child.component';
 import { BlueChildComponent } from './blue-child/blue-child.component';
 import { HomeComponent } from './home/home.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,13 +15,10 @@ import { HomeComponent } from './home/home.component';
     ParentComponent,
     RedChildComponent,
     BlueChildComponent,
-    HomeComponent
+    HomeComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

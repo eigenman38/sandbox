@@ -28,6 +28,10 @@ export class RedChildComponent implements OnInit, OnDestroy {
   @Input() mergeMapSubscribed$!: BehaviorSubject<boolean>;
   @Output() mergeValueEmitted = new EventEmitter<string>();
 
+  // for 2-way binding need to name this with inputChange
+  @Input() intervalRedChild!: number;
+  @Output() intervalRedChildChange = new EventEmitter<number>();
+
   private selector: string;
   private destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -68,6 +72,10 @@ export class RedChildComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.unsubscribe();
     console.log(`ngOnDestroy: ${this.selector}`);
+  }
+
+  intervalChanged() {
+    this.intervalRedChildChange.emit(this.intervalRedChild);
   }
 
   private mergeMapSubscribe() {

@@ -28,6 +28,9 @@ export class BlueChildComponent implements OnInit, OnDestroy {
   @Input() switchMapSubscribed$!: BehaviorSubject<boolean>;
   @Output() mergeValueEmitted = new EventEmitter<string>();
 
+  @Input() intervalBlueChild!: number;
+  @Output() intervalBlueChildChange = new EventEmitter<number>();
+
   private selector: string;
   private destroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -67,6 +70,10 @@ export class BlueChildComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.unsubscribe();
     console.log(`ngOnDestroy: ${this.selector}`);
+  }
+
+  intervalChanged() {
+    this.intervalBlueChildChange.emit(this.intervalBlueChild);
   }
 
   //switchMap

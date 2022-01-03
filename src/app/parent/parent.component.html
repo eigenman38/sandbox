@@ -4,10 +4,7 @@
     SwitchMap Unsubscribed
   </div>
 </button>
-<app-blue-child
-  [switchMapSubscribed$]="switchMapBlueChildSubscribed$"
-  (mergeValueEmitted)="mapValue = $event"
-></app-blue-child>
+
 <br />
 <button (click)="mergeMapSubscribeToggle()">
   <div *ngIf="mergeMapBlueChildSubscribed$ | async">MergeMap Subscribed</div>
@@ -15,9 +12,27 @@
     MergeMap Unsubscribed
   </div>
 </button>
-<app-red-child
-  [mergeMapSubscribed$]="mergeMapBlueChildSubscribed$"
-  (mergeValueEmitted)="mapValue = $event"
-></app-red-child>
-<br />
-<span>{{ mapValue }}</span>
+
+<div>
+  <label
+    >Parent Time Interval (ms)({{ intervalParent }}):
+    <input [(ngModel)]="intervalParent"
+  /></label>
+</div>
+<div>
+  <app-red-child
+    [(intervalRedChild)]="intervalParent"
+    [mergeMapSubscribed$]="mergeMapBlueChildSubscribed$"
+    (mergeValueEmitted)="mapValue = $event"
+  ></app-red-child>
+</div>
+
+<div>
+  <app-blue-child
+    [intervalBlueChild]="intervalParent"
+    (intervalBlueChildChange)="intervalParent = $event"
+    [switchMapSubscribed$]="switchMapBlueChildSubscribed$"
+    (mergeValueEmitted)="mapValue = $event"
+  ></app-blue-child>
+</div>
+<div>{{ mapValue }}</div>
