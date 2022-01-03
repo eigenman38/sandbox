@@ -24,7 +24,7 @@ class System {
   private static lastCheckpoint: checkPointType = [0, 0, 0];
   private static boosted = false;
   private static checkPoints: checkPointType[] = [];
-  private static lapped: boolean = false;
+  public static lapped: boolean = false;
   private static largestCheckpointIndex: number | null = null;
 
   public static checkPointChanged(currentCheckpoint: checkPointType): boolean {
@@ -54,8 +54,7 @@ class System {
     }
   }
 
-  //todo: seen does not mean lapped because we stored it when it changed but next iteration has changed false
-  //we see it agin but it hasn't changed yet.
+  ///
   public static checkPointSeen(
     currentCheckpoint: checkPointType,
     checkPointChanged: boolean
@@ -72,16 +71,6 @@ class System {
       );
     });
 
-    // if we've seen it then we have lapped.
-    if (seen) {
-      this.lapped = true;
-
-      // should calc the largest distance now
-      this.calculateLargestDistance(checkPointChanged);
-    } else {
-      this.storeCheckPoint(seen, checkPointChanged, currentCheckpoint);
-    }
-
     return seen;
   }
 
@@ -94,14 +83,22 @@ class System {
     // on longest leg ( that we know this means we have lapped)
 
     if (this.boosted) {
+      console.error(`shouldWeBoost: Already Boosted`);
       return false;
     }
 
-    if (this.angleStableForBoost(checkpointAngle)) {
+    if (!this.lapped) {
+      console.error(`shouldWeBoost: Not Lapped`);
       return false;
     }
 
-    if (this.onLongestLeg(checkPoint)) {
+    if (!this.onLongestLeg(checkPoint)) {
+      console.error(`shouldWeBoost: Not On Longest Leg`);
+      return false;
+    }
+
+    if (!this.angleStableForBoost(checkpointAngle)) {
+      console.error(`shouldWeBoost: Angle Unstable`);
       return false;
     }
 
@@ -109,7 +106,7 @@ class System {
   }
 
   public static angleStableForBoost(checkpointAngle: number): boolean {
-    return checkpointAngle <= 2 && checkpointAngle >= -2;
+    return checkpointAngle === 0;
   }
 
   public static onLongestLeg(checkPoint: checkPointType): boolean {
@@ -137,7 +134,7 @@ class System {
     boost: boolean,
     checkPoint: checkPointType,
     thrust: number
-  ) {
+  ): void {
     if (boost && this.shouldWeBoost(checkPoint, checkpointAngle)) {
       // boost
       console.log(`${checkPoint[0]}  ${checkPoint[1]}  BOOST`);
@@ -158,7 +155,8 @@ class System {
   public static outputErrorParams(
     checkpointAngle: number,
     checkpointDist: number,
-    changed: boolean
+    changed: boolean,
+    checkpointSeen: boolean
   ) {
     console.error(
       `Boosted = ${this.boosted} nextCheckpointAngle = ${checkpointAngle}`
@@ -167,24 +165,34 @@ class System {
     console.error(
       `nextCheckpointDist ${checkpointDist} changed = ${changed} lapped = ${this.lapped}`
     );
+
+    console.error(`checkpointSeen = ${checkpointSeen}`);
+
+    console.error(`Largest Leg Index = ${this.largestCheckpointIndex}`);
   }
 
-  private static calculateLargestDistance(checkPointChanged: boolean) {
+  public static calculateLargestDistance(checkPointChanged: boolean) {
     if (this.largestCheckpointIndex !== null) {
+      //console.error(`calculateLargestDistance: Already Calced`);
       // have to check this way since 0 is falsey
       return;
     } else {
       // determine the largest distance checkpoint if lapped, changed and not calculated yet.
       if (this.lapped && checkPointChanged) {
+        console.error(`calculateLargestDistance: Not Calced`);
         this.checkPoints.sort((a, b) => a[2] - b[2]); // sort ascending
+
+        //console.error(`calculateLargestDistance: Sorted=${this.checkPoints}`);
 
         // now max is in index(length -1).
         this.largestCheckpointIndex = this.checkPoints.length - 1;
+
+        //console.error(`calculateLargestDistance: largestCheckpointIndex=${this.largestCheckpointIndex}`);
       }
     }
   }
 
-  private static storeCheckPoint(
+  public static storeCheckPoint(
     checkpointSeen: boolean,
     checkPointChanged: boolean,
     checkpoint: [x: number, y: number, distanceToCheckpoint: number]
@@ -200,6 +208,9 @@ class System {
     }
 
     if (!checkPointChanged) {
+      return;
+    }
+    if (checkpointSeen) {
       return;
     }
 
@@ -232,14 +243,31 @@ while (true) {
   let currentPlayerPosition: positionType = [x, y];
   let currentOpponentPosition: positionType = [opponentX, opponentY];
 
+  ///////////////////
   // ask the system questions
   let checkPointChanged = System.checkPointChanged(currentCheckpoint);
 
-  // system isn't just answering but storing the check point if needed.
   let checkpointSeen = System.checkPointSeen(
     currentCheckpoint,
     checkPointChanged
   );
+
+  // if we've seen it then we have lapped.
+  if (checkPointChanged && checkpointSeen && !System.lapped) {
+    System.lapped = true;
+
+    // should calc the largest distance now
+    System.calculateLargestDistance(checkPointChanged);
+  }
+
+  // if checkpoint changed and we haven't seen it yet, then store it.
+  if (checkPointChanged && !checkpointSeen) {
+    System.storeCheckPoint(
+      checkpointSeen,
+      checkPointChanged,
+      currentCheckpoint
+    );
+  }
 
   let boost = System.shouldWeBoost(currentCheckpoint, nextCheckpointAngle);
   let thrust = 0;
@@ -258,6 +286,7 @@ while (true) {
   System.outputErrorParams(
     nextCheckpointAngle,
     nextCheckpointDist,
-    checkPointChanged
+    checkPointChanged,
+    checkpointSeen
   );
 }
