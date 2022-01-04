@@ -7,7 +7,8 @@ import { ParentComponent } from './parent/parent.component';
 import { RedChildComponent } from './red-child/red-child.component';
 import { BlueChildComponent } from './blue-child/blue-child.component';
 import { HomeComponent } from './home/home.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GreenChildComponent } from './green-child/green-child.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +17,9 @@ import { FormsModule } from '@angular/forms';
     RedChildComponent,
     BlueChildComponent,
     HomeComponent,
+    GreenChildComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
