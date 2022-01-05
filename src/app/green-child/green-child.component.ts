@@ -29,9 +29,9 @@ export class GreenChildComponent implements OnInit, OnDestroy {
   ///////methods/////////////
 
   // Choose city using select dropdown
-  changeCity(e: any) {
-    console.log(e.value);
-    this.cityName?.setValue(e.target.value, {
+  changeCity(e: Event) {
+    //console.log(e.value);
+    this.cityName?.setValue((e?.target as HTMLSelectElement)?.value, {
       onlySelf: true,
     });
   }
