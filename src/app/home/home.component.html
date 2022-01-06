@@ -1,1 +1,16 @@
-<p>home works!</p>
+<title>Home</title>
+
+<div>
+  <button (click)="generateRandomArray(10)">Generate New Random Array</button>
+</div>
+<div>
+  <li *ngFor="let entry of unsortedData">
+    <b>{{ entry }}</b>
+  </li>
+</div>
+<div><button (click)="sortArray()">Sort The Array</button></div>
+<div>
+  <li *ngFor="let entry of sortedData">
+    <b>{{ entry }}</b>
+  </li>
+</div>
