@@ -167,99 +167,102 @@
 
 //     if (checkpointAngle >= 170 || checkpointAngle <= -170) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 160 || checkpointAngle <= -160) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 150 || checkpointAngle <= -150) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 140 || checkpointAngle <= -140) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 130 || checkpointAngle <= -130) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 120 || checkpointAngle <= -120) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 110 || checkpointAngle <= -110) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 100 || checkpointAngle <= -100) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 90 || checkpointAngle <= -90) {
 //       thrust = 20;
-//       if (distanceToCheckpoint <= 2000) {
+//       if (distanceToCheckpoint <= 5000) {
 //         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 80 || checkpointAngle <= -80) {
-//       thrust = 70;
-//       if (distanceToCheckpoint <= 2000) {
-//         thrust = thrust / 4;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 5000) {
+//         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 70 || checkpointAngle <= -70) {
-//       thrust = 80;
-//       if (distanceToCheckpoint <= 2000) {
-//         thrust = thrust / 4;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 60 || checkpointAngle <= -60) {
-//       thrust = 95;
-//       if (distanceToCheckpoint <= 2000) {
-//         thrust = thrust / 4;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 50 || checkpointAngle <= -50) {
-//       thrust = 100;
-//       if (distanceToCheckpoint <= 2000) {
-//         thrust = thrust / 2;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 40 || checkpointAngle <= -40) {
-//       thrust = 100;
-//       if (distanceToCheckpoint <= 2000) {
-//         thrust = thrust / 2;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 30 || checkpointAngle <= -30) {
-//       thrust = 100;
-//       if (distanceToCheckpoint <= 2000) {
-//         thrust = thrust / 2;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
 //       }
 //     } else if (checkpointAngle >= 20 || checkpointAngle <= -20) {
-//       thrust = 100;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
+//       }
 //     } else if (checkpointAngle >= 10 || checkpointAngle <= -10) {
-//       thrust = 100;
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
+//       }
+//     } else if (checkpointAngle >= 5 || checkpointAngle <= -5) {
+//       thrust = 20;
+//       if (distanceToCheckpoint <= 4000) {
+//         thrust = 0;
+//       }
+//     } else if (checkpointAngle >= 2 || checkpointAngle <= -2) {
+//       thrust = 50;
+//       if (distanceToCheckpoint <= 2000) {
+//         thrust = 20;
+//       }
 //     } else {
 //       thrust = 100;
-
-//       //   if (distanceToCheckpoint <= 1000) {
-//       //     thrust = thrust / 4;
-//       //   }
 //     }
-
-//     // think the throttling needs to combine angle with distance
-//     //  such that if you are heading right at it then slow for sure when close.
-//     // if (distanceToCheckpoint <= 1000) {
-//     //   thrust = thrust / 4;
-//     // }
-//     // else  if (distanceToCheckpoint <= 2000) {
-//     //   thrust = thrust / 4;
-//     // }
 
 //     return thrust;
 //   }
