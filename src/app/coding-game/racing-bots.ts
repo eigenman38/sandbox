@@ -86,16 +86,24 @@ class System {
   ): positionType {
     let currentTarget: positionType = [currentCheckpoint[0], currentCheckpoint[1]];
     // tolerance
-    if (Math.abs(checkpointAngle) <= 3 || Math.abs(checkpointAngle) >= 45) {
-      console.error(`calculateTarget: Angle within Tolerance or > 45 degrees: No Oversteer`);
+    if (Math.abs(checkpointAngle) === 0 || Math.abs(checkpointAngle) >= 70) {
+      console.error(`calculateTarget: Angle within Tolerance or > 70 degrees: No Oversteer`);
 
       return currentTarget;
+    }
+
+    let modifiedAngle = checkpointAngle * 1;
+    if (modifiedAngle > 70) {
+      modifiedAngle = 70;
+    }
+    else if (modifiedAngle < -70) {
+      modifiedAngle = -70
     }
 
     let newTarget = this.rotateVector(
       playerPosition,
       currentTarget,
-      checkpointAngle
+      modifiedAngle
     );
 
     console.error(`calculateTarget: Target Vector Rotated: ${checkpointAngle} degrees to ${newTarget}`);
@@ -190,6 +198,13 @@ class System {
       return false;
     }
 
+    if (checkPoint[2] <= 6000) {
+      console.error(`shouldWeBoost: Checkpoint too close`);
+      return false;
+    }
+
+
+
     return true;
   }
 
@@ -257,103 +272,107 @@ class System {
     checkpointAngle: number,
     distanceToCheckpoint: number
   ): number {
+
+    return 100;
     let thrust: number = 0;
 
     if (checkpointAngle >= 170 || checkpointAngle <= -170) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 160 || checkpointAngle <= -160) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 150 || checkpointAngle <= -150) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 140 || checkpointAngle <= -140) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 130 || checkpointAngle <= -130) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 120 || checkpointAngle <= -120) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 110 || checkpointAngle <= -110) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 100 || checkpointAngle <= -100) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 90 || checkpointAngle <= -90) {
       thrust = 20;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = 0;
       }
     } else if (checkpointAngle >= 80 || checkpointAngle <= -80) {
       thrust = 50;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = thrust / 4;
       }
     } else if (checkpointAngle >= 70 || checkpointAngle <= -70) {
       thrust = 70;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = thrust / 4;
       }
     } else if (checkpointAngle >= 60 || checkpointAngle <= -60) {
       thrust = 80;
-      if (distanceToCheckpoint <= 2000) {
+      if (distanceToCheckpoint <= 3000) {
         thrust = thrust / 4;
       }
     } else if (checkpointAngle >= 50 || checkpointAngle <= -50) {
-      thrust = 90;
-      if (distanceToCheckpoint <= 2000) {
+      thrust = 80;
+      if (distanceToCheckpoint <= 3000) {
         thrust = thrust / 2;
       }
     } else if (checkpointAngle >= 40 || checkpointAngle <= -40) {
-      thrust = 100;
-      if (distanceToCheckpoint <= 2000) {
+      thrust = 80;
+      if (distanceToCheckpoint <= 3000) {
         thrust = thrust / 2;
       }
     } else if (checkpointAngle >= 30 || checkpointAngle <= -30) {
-      thrust = 100;
-      if (distanceToCheckpoint <= 2000) {
+      thrust = 80;
+      if (distanceToCheckpoint <= 3000) {
         thrust = thrust / 2;
       }
     } else if (checkpointAngle >= 20 || checkpointAngle <= -20) {
       thrust = 100;
+      if (distanceToCheckpoint <= 3000) {
+        thrust = thrust / 2;
+      }
     } else if (checkpointAngle >= 10 || checkpointAngle <= -10) {
       thrust = 100;
+      if (distanceToCheckpoint <= 2500) {
+        thrust = thrust / 2;
+      }
+    }
+    else if (checkpointAngle >= 5 || checkpointAngle <= -5) {
+      thrust = 100;
+      if (distanceToCheckpoint <= 2000) {
+        thrust = thrust / 2;
+      }
     } else {
       thrust = 100;
 
-      //   if (distanceToCheckpoint <= 1000) {
-      //     thrust = thrust / 4;
-      //   }
     }
 
-    // think the throttling needs to combine angle with distance
-    //  such that if you are heading right at it then slow for sure when close.
-    // if (distanceToCheckpoint <= 1000) {
-    //   thrust = thrust / 4;
-    // }
-    // else  if (distanceToCheckpoint <= 2000) {
-    //   thrust = thrust / 4;
-    // }
+
 
     return thrust;
   }
