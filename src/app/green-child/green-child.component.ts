@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-green-child',
@@ -19,7 +19,7 @@ export class GreenChildComponent implements OnInit, OnDestroy {
     cityName: ['', [Validators.required]],
   });
 
-  constructor(private elementRef: ElementRef, public formBuilder: FormBuilder) {
+  constructor(private elementRef: ElementRef, public formBuilder: UntypedFormBuilder) {
     this.selector = elementRef.nativeElement.tagName;
   }
   ngOnDestroy(): void {}
